@@ -64,6 +64,10 @@ const useStyles = makeStyles(theme => ({
 		justifySelf: "flex-end",
 	},
 
+	userNameText: {
+		marginLeft: 8,
+	},
+
 	closedBadge: {
 		alignSelf: "center",
 		justifySelf: "flex-end",
@@ -190,6 +194,16 @@ const TicketListItem = ({ ticket }) => {
 							>
 								{ticket.contact.name}
 							</Typography>
+							{ticket.user && (
+								<Typography 
+									className={classes.userNameText}
+									component="span" 
+									variant='body2' 
+									color="textSecondary"
+								>
+									{ticket.user.name}
+								</Typography>
+							)}
 							{ticket.status === "closed" && (
 								<Badge
 									className={classes.closedBadge}
