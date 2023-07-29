@@ -26,7 +26,7 @@ const SendWhatsAppMediaByNumber = async ({
     const wbot = getWbot(whatsappByUser.id);
     const newMedia = MessageMedia.fromFilePath(media.path);
     const sentMessage = await wbot.sendMessage(`${number}@c.us`, newMedia, {
-      caption: body,
+      caption: `\u2004${body}`,
       sendAudioAsVoice: true
     });
 

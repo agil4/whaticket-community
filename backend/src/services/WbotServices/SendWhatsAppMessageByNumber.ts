@@ -22,7 +22,10 @@ const SendWhatsAppMessageByNumber = async ({
   const wbot = getWbot(whatsappByUser.id);
 
   try {
-    const sentMessage = await wbot.sendMessage(`${number}@c.us`, body);
+    const sentMessage = await wbot.sendMessage(
+      `${number}@c.us`,
+      `\u2004${body}`
+    );
 
     return sentMessage;
   } catch (err) {
