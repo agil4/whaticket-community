@@ -19,6 +19,7 @@ import ButtonWithSpinner from "../ButtonWithSpinner";
 import ContactModal from "../ContactModal";
 import toastError from "../../errors/toastError";
 import { AuthContext } from "../../context/Auth/AuthContext";
+import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 
 const filter = createFilterOptions({
 	trim: true,
@@ -31,6 +32,7 @@ const NewTicketModal = ({ modalOpen, onClose }) => {
 	const [loading, setLoading] = useState(false);
 	const [searchParam, setSearchParam] = useState("");
 	const [selectedContact, setSelectedContact] = useState(null);
+	const [selectedQueue, setSelectedQueue] = useState("");
 	const [newContact, setNewContact] = useState({});
 	const [contactModalOpen, setContactModalOpen] = useState(false);
 	const { user } = useContext(AuthContext);
@@ -74,6 +76,7 @@ const NewTicketModal = ({ modalOpen, onClose }) => {
 				contactId: contactId,
 				userId: user.id,
 				status: "open",
+				queueId: selectedQueue || undefined,
 			});
 			history.push(`/tickets/${ticket.id}`);
 		} catch (err) {
@@ -180,6 +183,30 @@ const NewTicketModal = ({ modalOpen, onClose }) => {
 							/>
 						)}
 					/>
+					{user.queues.length > 1 && <FormControl fullWidth margin="dense" variant="outlined">
+						<InputLabel>{i18n.t("queueSelect.inputLabel")}</InputLabel>
+						<Select
+							labelWidth={60}
+							required
+							value={selectedQueue}
+							MenuProps={{
+								anchorOrigin: {
+									vertical: "bottom",
+									horizontal: "left",
+								},
+								transformOrigin: {
+									vertical: "top",
+									horizontal: "left",
+								},
+								getContentAnchorEl: null,
+							}}
+							onChange={(e) => setSelectedQueue(e.target.value)}
+						>
+							{user.queues.map((queue) => (
+								<MenuItem key={queue.id} value={queue.id}>{queue.name}</MenuItem>
+							))}
+						</Select>
+					</FormControl>}
 				</DialogContent>
 				<DialogActions>
 					<Button
@@ -193,7 +220,7 @@ const NewTicketModal = ({ modalOpen, onClose }) => {
 					<ButtonWithSpinner
 						variant="contained"
 						type="button"
-						disabled={!selectedContact}
+						disabled={!selectedContact || (user.queues.length > 1 && !selectedQueue)}
 						onClick={() => handleSaveTicket(selectedContact.id)}
 						color="primary"
 						loading={loading}
