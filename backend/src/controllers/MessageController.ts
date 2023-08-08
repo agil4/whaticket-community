@@ -90,7 +90,7 @@ export const sendMessageByNumber = async (
   const user = req.user as User;
   const medias = req.files as Express.Multer.File[];
 
-  if (medias.length > 0) {
+  if (medias?.length > 0) {
     await Promise.all(
       medias.map(async (media: Express.Multer.File) => {
         await SendWhatsAppMediaByNumber({
