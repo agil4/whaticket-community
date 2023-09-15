@@ -72,7 +72,7 @@ const useAuth = () => {
 
 	useEffect(() => {
 		const socket = openSocket();
-
+		
 		socket.on("user", data => {
 			if (data.action === "update" && data.user.id === user.id) {
 				setUser(data.user);
@@ -80,7 +80,9 @@ const useAuth = () => {
 		});
 
 		return () => {
-			socket.disconnect();
+			if (socket.connected) {
+				socket.disconnect();
+			}
 		};
 	}, [user]);
 
